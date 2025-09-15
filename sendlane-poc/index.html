@@ -15,15 +15,6 @@
         <button onclick="sendCustomEvent()">Enviar Custom Event</button>
     </div>
 
-    <div>
-        <h3>Instrucciones:</h3>
-        <ul>
-            <li>Abre las Developer Tools (F12)</li>
-            <li>Ve a la pestaña Console</li>
-            <li>Ingresa un email y presiona el botón</li>
-            <li>Revisa los logs en consola para ver el resultado</li>
-        </ul>
-    </div>
 
     <script>
         // Cargar el script de Sendlane
@@ -32,7 +23,7 @@
         script.src = 'https://sendlane.com/scripts/pusher.js';
         script.async = true;
         // Usando el token del ejemplo que proporcionaste
-        script.setAttribute('data-token', 'ae422d3f-5baa-4552-a8fe-e13b97e818d1');
+        script.setAttribute('data-token', 'db9ab736-afaf-42f4-af04-695828a31bda');
         document.head.appendChild(script);
 
         // Inicializar Sendlane
@@ -94,7 +85,7 @@
 
         // Log adicional para debugging
         console.log('🐛 POC Sendlane Custom Events iniciado');
-        console.log('📋 Token utilizado:', 'ae422d3f-5baa-4552-a8fe-e13b97e818d1');
+        console.log('📋 Token utilizado:', 'db9ab736-afaf-42f4-af04-695828a31bda');
     </script>
 </body>
 </html>
