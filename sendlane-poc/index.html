@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sendlane Custom Events POC</title>
+</head>
+<body>
+    <h1>Sendlane Custom Events POC</h1>
+    <p>Prueba de concepto para enviar custom fields usando custom events</p>
+
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="ejemplo@correo.com">
+        <button onclick="sendCustomEvent()">Enviar Custom Event</button>
+    </div>
+
+    <div>
+        <h3>Instrucciones:</h3>
+        <ul>
+            <li>Abre las Developer Tools (F12)</li>
+            <li>Ve a la pestaña Console</li>
+            <li>Ingresa un email y presiona el botón</li>
+            <li>Revisa los logs en consola para ver el resultado</li>
+        </ul>
+    </div>
+
+    <script>
+        // Cargar el script de Sendlane
+        console.log('🚀 Cargando Sendlane script...');
+        const script = document.createElement('script');
+        script.src = 'https://sendlane.com/scripts/pusher.js';
+        script.async = true;
+        // Usando el token del ejemplo que proporcionaste
+        script.setAttribute('data-token', 'ae422d3f-5baa-4552-a8fe-e13b97e818d1');
+        document.head.appendChild(script);
+
+        // Inicializar Sendlane
+        window._Sendlane = window._Sendlane || [];
+
+        script.onload = function() {
+            console.log('✅ Sendlane script cargado correctamente');
+        };
+
+        script.onerror = function() {
+            console.error('❌ Error al cargar Sendlane script');
+        };
+
+        function sendCustomEvent() {
+            const email = document.getElementById('email').value;
+
+            if (!email) {
+                console.warn('⚠️ Por favor ingresa un email');
+                alert('Por favor ingresa un email');
+                return;
+            }
+
+            console.log('📧 Email capturado:', email);
+            console.log('🔄 Enviando custom event...');
+
+            // Estructura del custom event con custom fields
+            const customEventData = {
+                "custom_event": "event_test",
+                "email": email,
+                "data": {
+                    // Custom fields de ejemplo
+                    "product_id": "poc-test-001",
+                    "product_name": "Test Product POC",
+                    "category": "testing",
+                    "price": 99.99,
+                    "customer_segment": "poc_tester",
+                    "source": "html_poc",
+                    "timestamp": new Date().toISOString(),
+                    // Campos adicionales que podrían venir de MIVA
+                    "order_value": 150.00,
+                    "customer_type": "returning",
+                    "purchase_intent": "high"
+                }
+            };
+
+            console.log('📦 Datos del custom event:', JSON.stringify(customEventData, null, 2));
+
+            // Enviar el custom event
+            try {
+                _Sendlane.push(customEventData);
+                console.log('✅ Custom event enviado exitosamente');
+                console.log('🔍 Revisa la pestaña Network para ver las llamadas HTTP');
+                alert('Custom event enviado! Revisa la consola para más detalles');
+            } catch (error) {
+                console.error('❌ Error al enviar custom event:', error);
+                alert('Error al enviar custom event: ' + error.message);
+            }
+        }
+
+        // Log adicional para debugging
+        console.log('🐛 POC Sendlane Custom Events iniciado');
+        console.log('📋 Token utilizado:', 'ae422d3f-5baa-4552-a8fe-e13b97e818d1');
+    </script>
+</body>
+</html>

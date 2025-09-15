@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+# Except sendlane-poc folder
+!sendlane-poc/
+!sendlane-poc/**
+
+# Keep .gitignore
+!.gitignore
