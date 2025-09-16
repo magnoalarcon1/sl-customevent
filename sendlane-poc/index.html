@@ -17,24 +17,36 @@
 
 
     <script>
+        // Initialize Sendlane queue first
+        window._Sendlane = window._Sendlane || [];
+
         // Load Sendlane script
         console.log('🚀 Loading Sendlane script...');
         const script = document.createElement('script');
         script.src = 'https://sendlane.com/scripts/pusher.js';
         script.async = true;
-        // Using the token from the provided example
         script.setAttribute('data-token', 'db9ab736-afaf-42f4-af04-695828a31bda');
         document.head.appendChild(script);
 
-        // Initialize Sendlane
-        window._Sendlane = window._Sendlane || [];
+        // Variable to track if Sendlane is ready
+        let sendlaneReady = false;
 
         script.onload = function() {
             console.log('✅ Sendlane script loaded successfully');
+
+            // Initialize Beacon with event_id (required for proper tracking)
+            try {
+                _Sendlane.push({ event_id: 'poc_test_event_id' });
+                sendlaneReady = true;
+                console.log('✅ Sendlane Beacon initialized with event_id');
+            } catch (error) {
+                console.error('❌ Error initializing Sendlane Beacon:', error);
+            }
         };
 
         script.onerror = function() {
             console.error('❌ Error loading Sendlane script');
+            sendlaneReady = false;
         };
 
         function sendCustomEvent() {
@@ -46,46 +58,80 @@
                 return;
             }
 
+            if (!sendlaneReady) {
+                console.error('❌ Sendlane not ready yet');
+                alert('Sendlane is still loading, please wait and try again');
+                return;
+            }
+
             console.log('📧 Email captured:', email);
-            console.log('🔄 Sending custom event...');
+            console.log('🔄 Identifying contact and sending custom event...');
 
-            // Custom event structure with custom fields
-            const customEventData = {
-                "custom_event": "event_test",
-                "email": email,
-                "data": {
-                    // Example custom fields
-                    "product_id": "poc-test-001",
-                    "product_name": "Test Product POC",
-                    "category": "testing",
-                    "price": 99.99,
-                    "customer_segment": "poc_tester",
-                    "source": "html_poc",
-                    "timestamp": new Date().toISOString(),
-                    // Additional fields that could come from MIVA
-                    "order_value": 150.00,
-                    "customer_type": "returning",
-                    "purchase_intent": "high"
-                }
-            };
-
-            console.log('📦 Custom event data:', JSON.stringify(customEventData, null, 2));
-
-            // Send the custom event
             try {
-                _Sendlane.push(customEventData);
-                console.log('✅ Custom event sent successfully');
-                console.log('🔍 Check Network tab to see HTTP calls');
-                alert('Custom event sent! Check console for more details');
+                // First, identify/add the contact to Sendlane
+                _Sendlane.push({
+                    email: email
+                });
+                console.log('✅ Contact identified:', email);
+
+                // Wait a moment for contact identification, then send custom event
+                setTimeout(() => {
+                    // Custom event structure with custom fields
+                    const customEventData = {
+                        "custom_event": "event_test",
+                        "email": email,
+                        "data": {
+                            // Example custom fields
+                            "product_id": "poc-test-001",
+                            "product_name": "Test Product POC",
+                            "category": "testing",
+                            "price": 99.99,
+                            "customer_segment": "poc_tester",
+                            "source": "html_poc",
+                            "timestamp": new Date().toISOString(),
+                            // Additional fields that could come from MIVA
+                            "order_value": 150.00,
+                            "customer_type": "returning",
+                            "purchase_intent": "high"
+                        }
+                    };
+
+                    console.log('📦 Custom event data:', JSON.stringify(customEventData, null, 2));
+
+                    // Send the custom event
+                    _Sendlane.push(customEventData);
+                    console.log('✅ Custom event sent successfully');
+                    console.log('🔍 Check Network tab to see HTTP calls');
+                    alert('Contact added and custom event sent! Check console for details');
+
+                }, 500); // Small delay to ensure contact is processed first
+
             } catch (error) {
-                console.error('❌ Error sending custom event:', error);
-                alert('Error sending custom event: ' + error.message);
+                console.error('❌ Error sending to Sendlane:', error);
+                alert('Error: ' + error.message);
             }
         }
+
+        // Additional debugging functions
+        function checkSendlaneStatus() {
+            console.log('📊 Sendlane Status Check:');
+            console.log('- Script ready:', sendlaneReady);
+            console.log('- _Sendlane object:', window._Sendlane);
+            console.log('- Queue length:', window._Sendlane ? window._Sendlane.length : 'N/A');
+        }
+
+        // Make status check available globally for debugging
+        window.checkSendlaneStatus = checkSendlaneStatus;
 
         // Additional logging for debugging
         console.log('🐛 Sendlane Custom Events POC started');
         console.log('📋 Token used:', 'db9ab736-afaf-42f4-af04-695828a31bda');
+        console.log('💡 Tip: Use checkSendlaneStatus() in console to debug');
+
+        // Check status after a delay to see initial state
+        setTimeout(() => {
+            checkSendlaneStatus();
+        }, 2000);
     </script>
 </body>
 </html>
