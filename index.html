@@ -42,7 +42,7 @@
                 return;
             }
 
-            console.log('📧 Starting contact identification and custom event for:', email);
+            console.log('📧 Starting contact identification and standard event for:', email);
 
             // STEP 1: Identify contact (REQUIRED per Sendlane docs)
             _Sendlane.push({
@@ -51,16 +51,17 @@
             });
             console.log('🆔 Contact identified');
 
-            // STEP 2: Send custom event after identification
+            // STEP 2: Send standard event after identification (using JavaScript API available events)
             setTimeout(() => {
                 _Sendlane.push({
-                    "event": CUSTOM_EVENT_NAME,
+                    "event": "product_viewed",  // Standard event that works with JavaScript API
                     "email": email,
+                    "product_id": "poc-test-001",
                     "first_name": "poc-test-name",
                     "last_name": "poc-test-lastname"
                 });
-                console.log('✅ Custom event sent');
-                alert('Contact identified and custom event sent for ' + email);
+                console.log('✅ Standard event (product_viewed) sent');
+                alert('Contact identified and standard event sent for ' + email);
             }, 500); // Small delay to ensure identification processes first
         }
     </script>
