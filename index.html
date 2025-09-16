@@ -15,7 +15,7 @@
 
     <!-- Sendlane Beacon Installation (Following woodworkerssource pattern) -->
     <script>
-        window._Sendlane = window._Sendlane || [];
+        
     </script>
     <script>
         // Create and configure pusher script with data-token
@@ -24,7 +24,7 @@
         script.async = true;
         script.setAttribute('data-token', SENDLANE_DATA_TOKEN);
         document.head.appendChild(script);
-
+        window._Sendlane = window._Sendlane || [];
         // Initialize Beacon
         _Sendlane.push({
             event_id: BEACON_EVENT_ID
