@@ -8,17 +8,24 @@
     <!-- Sendlane Configuration -->
     <script>
         // Configuration - Update these values as needed
-        const SENDLANE_TOKEN = 'db9ab736-afaf-42f4-af04-695828a31bda';
-        const BEACON_EVENT_ID = 'lkfolewnIGEQi';    // Beacon tracking ID
+        const SENDLANE_DATA_TOKEN = 'db9ab736-afaf-42f4-af04-695828a31bda';  // Beacon data-token
+        const BEACON_EVENT_ID = 'lkfolewnIGEQi';    // Beacon event_id
         const CUSTOM_EVENT_NAME = 'event_1234';     // Custom event name
     </script>
 
-    <!-- Sendlane Beacon Installation (KISS) -->
+    <!-- Sendlane Beacon Installation (Following woodworkerssource pattern) -->
     <script>
         window._Sendlane = window._Sendlane || [];
     </script>
-    <script src="https://sendlane.com/scripts/pusher.js" async></script>
     <script>
+        // Create and configure pusher script with data-token
+        const script = document.createElement('script');
+        script.src = 'https://sendlane.com/scripts/pusher.js';
+        script.async = true;
+        script.setAttribute('data-token', SENDLANE_DATA_TOKEN);
+        document.head.appendChild(script);
+
+        // Initialize Beacon
         _Sendlane.push({
             event_id: BEACON_EVENT_ID
         });
