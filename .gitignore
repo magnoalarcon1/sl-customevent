@@ -1,9 +1,5 @@
-# Ignore everything
-*
+# Ignore all markdown files
+*.md
 
-# Except sendlane-poc folder
-!sendlane-poc/
-!sendlane-poc/**
-
-# Keep .gitignore
-!.gitignore
+# Ignore Claude configuration
+.claude/
